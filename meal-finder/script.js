@@ -6,8 +6,8 @@ const search = document.getElementById('search'),
   single_mealEl = document.getElementById('single-meal');
 
 // Search meal and fetch from API
-function searchMeal(e) {
-  e.preventDefault();
+const searchMeal = (event) => {
+  event.preventDefault();
 
   // Clear single meal
   single_mealEl.innerHTML = '';
@@ -18,8 +18,8 @@ function searchMeal(e) {
   // Check for empty
   if (term.trim()) {
     fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         console.log(data);
         resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;
 
@@ -28,7 +28,7 @@ function searchMeal(e) {
         } else {
           mealsEl.innerHTML = data.meals
             .map(
-              meal => `
+              (meal) => `
             <div class="meal">
               <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
               <div class="meal-info" data-mealID="${meal.idMeal}">
@@ -45,36 +45,36 @@ function searchMeal(e) {
   } else {
     alert('Please enter a search term');
   }
-}
+};
 
 // Fetch meal by ID
-function getMealById(mealID) {
+const getMealById = (mealID) => {
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`)
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       const meal = data.meals[0];
 
       addMealToDOM(meal);
     });
-}
+};
 
 // Fetch random meal from API
-function getRandomMeal() {
+const getRandomMeal = () => {
   // Clear meals and heading
   mealsEl.innerHTML = '';
   resultHeading.innerHTML = '';
 
   fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       const meal = data.meals[0];
 
       addMealToDOM(meal);
     });
-}
+};
 
 // Add meal to DOM
-function addMealToDOM(meal) {
+const addMealToDOM = (meal) => {
   const ingredients = [];
 
   for (let i = 1; i <= 20; i++) {
@@ -99,19 +99,19 @@ function addMealToDOM(meal) {
         <p>${meal.strInstructions}</p>
         <h2>Ingredients</h2>
         <ul>
-          ${ingredients.map(ing => `<li>${ing}</li>`).join('')}
+          ${ingredients.map((ing) => `<li>${ing}</li>`).join('')}
         </ul>
       </div>
     </div>
   `;
-}
+};
 
 // Event listeners
 submit.addEventListener('submit', searchMeal);
 random.addEventListener('click', getRandomMeal);
 
-mealsEl.addEventListener('click', e => {
-  const mealInfo = e.path.find(item => {
+mealsEl.addEventListener('click', (event) => {
+  const mealInfo = event.path.find((item) => {
     if (item.classList) {
       return item.classList.contains('meal-info');
     } else {
